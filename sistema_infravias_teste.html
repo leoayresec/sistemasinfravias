@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InfraVias - Cadastro de Atividades</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --primary: #1565c0;
+      --primary-dark: #0d47a1;
+      --success: #2e7d32;
+      --danger: #c62828;
+      --warning: #ef6c00;
+      --border: #d9e0e7;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: white;
+      padding: 28px 18px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+
+    header p {
+      margin: 0;
+      opacity: 0.95;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 24px auto 48px;
+      padding: 0 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 22px;
+      border-bottom: 2px solid #eef2f7;
+      padding-bottom: 12px;
+    }
+
+    .subtitulo {
+      font-size: 16px;
+      font-weight: bold;
+      margin: 18px 0 12px;
+      color: var(--primary-dark);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 15px;
+      background: white;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .mini-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      background: #fbfcfe;
+      margin-top: 14px;
+    }
+
+    .mini-card h3 {
+      margin-top: 0;
+      color: var(--primary-dark);
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 13px 18px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      opacity: 0.95;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-warning {
+      background: var(--warning);
+      color: white;
+    }
+
+    .btn-light {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .resultado {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 18px;
+      border-radius: 16px;
+      overflow: auto;
+      white-space: pre-wrap;
+      font-family: Consolas, monospace;
+      min-height: 180px;
+      margin-top: 16px;
+    }
+
+    .status {
+      display: none;
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: bold;
+    }
+
+    .status.success {
+      display: block;
+      background: #e8f5e9;
+      color: #1b5e20;
+      border: 1px solid #81c784;
+    }
+
+    .status.error {
+      display: block;
+      background: #ffebee;
+      color: #b71c1c;
+      border: 1px solid #ef9a9a;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .linha-resumo {
+      background: #eef6ff;
+      border-left: 4px solid var(--primary);
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .grid, .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      header h1 {
+        font-size: 23px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>InfraVias - Cadastro de Atividades</h1>
+    <p>Versão HTML inicial para testes locais e futura integração com Google Planilhas.</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>1. Configuração de envio</h2>
+      <div class="field">
+        <label for="endpoint">URL do Google Apps Script</label>
+        <input id="endpoint" type="text" placeholder="Cole aqui futuramente a URL do Web App do Apps Script" />
+        <div class="hint">Nesta primeira versão, o sistema salva em <b>localStorage</b>. Quando a URL for configurada, ele também tentará enviar os dados via POST.</div>
+      </div>
+    </section>
+
+    <form id="formulario">
+      <section class="card">
+        <h2>2. Dados gerais</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="data">Data</label>
+            <input id="data" type="date" />
+          </div>
+          <div class="field">
+            <label for="bairro">Bairro</label>
+            <input id="bairro" type="text" placeholder="Ex.: Marco" required />
+          </div>
+          <div class="field">
+            <label for="via">Via</label>
+            <input id="via" type="text" placeholder="Ex.: Travessa X" required />
+          </div>
+          <div class="field">
+            <label for="encarregado">Encarregado</label>
+            <input id="encarregado" type="text" placeholder="Nome do encarregado" />
+          </div>
+          <div class="field">
+            <label for="apontador">Apontador</label>
+            <input id="apontador" type="text" placeholder="Nome do apontador" />
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>3. Limpeza mecanizada</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="limpezaComprimento">Comprimento</label>
+            <input id="limpezaComprimento" type="text" inputmode="decimal" placeholder="0,00" />
+          </div>
+          <div class="field">
+            <label for="limpezaLargura">Largura</label>
+            <input id="limpezaLargura" type="text" inputmode="decimal" placeholder="0,00" />
+          </div>
+          <div class="field">
+            <label>Área calculada</label>
+            <input id="limpezaArea" type="text" readonly />
+          </div>
+        </div>
+        <div class="field" style="margin-top:14px;">
+          <label for="obsLimpeza">Ocorrência / Observação</label>
+          <textarea id="obsLimpeza"></textarea>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>4. Drenagem profunda</h2>
+        <div id="drenagens"></div>
+        <div class="buttons">
+          <button type="button" class="btn-primary" onclick="adicionarDrenagem()">➕ Adicionar nova drenagem</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>5. PV / Boca de Lobo</h2>
+        <div id="pvblContainer"></div>
+        <div class="buttons">
+          <button type="button" class="btn-primary" onclick="adicionarPVBL()">➕ Adicionar novo PV / BL</button>
+        </div>
+
+        <div class="field" style="margin-top:16px;">
+          <label for="obsPVBL">Ocorrência geral de PV / BL</label>
+          <textarea id="obsPVBL"></textarea>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>6. Motorbomba</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="motorMinutos">Minutos</label>
+            <input id="motorMinutos" type="text" inputmode="decimal" placeholder="Ex.: 90" />
+          </div>
+          <div class="field">
+            <label>Horas calculadas</label>
+            <input id="motorHoras" type="text" readonly />
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>7. Terraplenagem</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="terrapComp">Comprimento</label>
+            <input id="terrapComp" type="text" inputmode="decimal" />
+          </div>
+          <div class="field">
+            <label for="terrapLarg">Largura</label>
+            <input id="terrapLarg" type="text" inputmode="decimal" />
+          </div>
+          <div class="field">
+            <label for="terrapProf">Profundidade</label>
+            <input id="terrapProf" type="text" inputmode="decimal" />
+          </div>
+          <div class="field">
+            <label>Volume calculado</label>
+            <input id="terrapVol" type="text" readonly />
+          </div>
+        </div>
+        <div class="field" style="margin-top:14px;">
+          <label for="obsTerrap">Ocorrência / Observação</label>
+          <textarea id="obsTerrap"></textarea>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>8. Pavimentação</h2>
+
+        <div class="subtitulo">Sub-base / Base</div>
+        <div class="grid">
+          <div class="field"><label for="subbaseComp">Comprimento</label><input id="subbaseComp" type="text" inputmode="decimal" /></div>
+          <div class="field"><label for="subbaseLarg">Largura</label><input id="subbaseLarg" type="text" inputmode="decimal" /></div>
+          <div class="field"><label for="subbaseProf">Profundidade</label><input id="subbaseProf" type="text" inputmode="decimal" /></div>
+          <div class="field"><label>Volume calculado</label><input id="subbaseVol" type="text" readonly /></div>
+        </div>
+
+        <div class="subtitulo">CBUQ</div>
+        <div class="grid">
+          <div class="field"><label for="cbuqComp">Comprimento</label><input id="cbuqComp" type="text" inputmode="decimal" /></div>
+          <div class="field"><label for="cbuqLarg">Largura</label><input id="cbuqLarg" type="text" inputmode="decimal" /></div>
+          <div class="field"><label for="cbuqEsp">Espessura</label><input id="cbuqEsp" type="text" inputmode="decimal" /></div>
+          <div class="field"><label>Volume calculado</label><input id="cbuqVol" type="text" readonly /></div>
+        </div>
+
+        <div class="subtitulo">Binder</div>
+        <div class="grid">
+          <div class="field"><label for="binderComp">Comprimento</label><input id="binderComp" type="text" inputmode="decimal" /></div>
+          <div class="field"><label for="binderLarg">Largura</label><input id="binderLarg" type="text" inputmode="decimal" /></div>
+          <div class="field"><label>Área calculada</label><input id="binderArea" type="text" readonly /></div>
+        </div>
+
+        <div class="subtitulo">Pintura de ligação</div>
+        <div class="grid">
+          <div class="field"><label for="pinturaComp">Comprimento</label><input id="pinturaComp" type="text" inputmode="decimal" /></div>
+          <div class="field"><label for="pinturaLarg">Largura</label><input id="pinturaLarg" type="text" inputmode="decimal" /></div>
+          <div class="field"><label>Área calculada</label><input id="pinturaArea" type="text" readonly /></div>
+        </div>
+
+        <div class="field" style="margin-top:14px;">
+          <label for="obsPav">Ocorrência / Observação</label>
+          <textarea id="obsPav"></textarea>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>9. Urbanização</h2>
+
+        <div class="subtitulo">Demolição de calçada</div>
+        <div class="grid">
+          <div class="field"><label for="demCalcComp">Comprimento</label><input id="demCalcComp" type="text" inputmode="decimal" /></div>
+          <div class="field"><label for="demCalcLarg">Largura</label><input id="demCalcLarg" type="text" inputmode="decimal" /></div>
+          <div class="field"><label>Área calculada</label><input id="demCalcArea" type="text" readonly /></div>
+        </div>
+
+        <div class="subtitulo">Calçada</div>
+        <div class="grid">
+          <div class="field"><label for="calcadaComp">Comprimento</label><input id="calcadaComp" type="text" inputmode="decimal" /></div>
+          <div class="field"><label for="calcadaLarg">Largura</label><input id="calcadaLarg" type="text" inputmode="decimal" /></div>
+          <div class="field"><label>Área calculada</label><input id="calcadaArea" type="text" readonly /></div>
+        </div>
+
+        <div class="subtitulo">Demolição / Construção de meio-fio</div>
+        <div class="grid">
+          <div class="field"><label for="demMeioFio">Demolição de meio-fio - Comprimento</label><input id="demMeioFio" type="text" inputmode="decimal" /></div>
+          <div class="field"><label for="meioFio">Meio-fio - Comprimento</label><input id="meioFio" type="text" inputmode="decimal" /></div>
+        </div>
+
+        <div class="subtitulo">Colchão de areia - Meio-fio</div>
+        <div class="grid">
+          <div class="field"><label for="camfComp">Comprimento</label><input id="camfComp" type="text" inputmode="decimal" /></div>
+          <div class="field"><label for="camfLarg">Largura</label><input id="camfLarg" type="text" inputmode="decimal" /></div>
+          <div class="field"><label for="camfEsp">Espessura</label><input id="camfEsp" type="text" value="0,10" inputmode="decimal" /></div>
+          <div class="field"><label>Volume calculado</label><input id="camfVol" type="text" readonly /></div>
+        </div>
+
+        <div class="subtitulo">Linha d'água</div>
+        <div class="grid">
+          <div class="field"><label for="demLinhaComp">Demolição - Comprimento</label><input id="demLinhaComp" type="text" inputmode="decimal" /></div>
+          <div class="field"><label for="demLinhaLarg">Demolição - Largura</label><input id="demLinhaLarg" type="text" inputmode="decimal" /></div>
+          <div class="field"><label for="linhaComp">Construção - Comprimento</label><input id="linhaComp" type="text" inputmode="decimal" /></div>
+          <div class="field"><label for="linhaLarg">Construção - Largura</label><input id="linhaLarg" type="text" inputmode="decimal" /></div>
+          <div class="field"><label>Área demolição</label><input id="demLinhaArea" type="text" readonly /></div>
+          <div class="field"><label>Área construção</label><input id="linhaArea" type="text" readonly /></div>
+        </div>
+
+        <div class="field" style="margin-top:14px;">
+          <label for="obsUrb">Ocorrência / Observação</label>
+          <textarea id="obsUrb"></textarea>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>10. Redes auxiliares e informações adicionais</h2>
+        <div class="grid-2">
+          <div class="field">
+            <label for="redesAux">Redes auxiliares</label>
+            <textarea id="redesAux"></textarea>
+          </div>
+          <div class="field">
+            <label for="outrasInfo">Outras informações</label>
+            <textarea id="outrasInfo"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>11. Ações</h2>
+        <div class="buttons">
+          <button type="submit" class="btn-success">💾 Salvar lançamento</button>
+          <button type="button" class="btn-primary" onclick="gerarPreview()">👁️ Visualizar JSON</button>
+          <button type="button" class="btn-warning" onclick="baixarJSON()">⬇️ Baixar JSON salvo</button>
+          <button type="button" class="btn-light" onclick="limparFormulario()">🧹 Limpar formulário</button>
+          <button type="button" class="btn-danger" onclick="limparBaseLocal()">🗑️ Limpar base local</button>
+        </div>
+
+        <div id="status" class="status"></div>
+        <pre id="preview" class="resultado">Os dados do lançamento aparecerão aqui após clicar em “Visualizar JSON”.</pre>
+      </section>
+    </form>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "infravias_registros_html";
+    let contadorDrenagem = 0;
+    let contadorPVBL = 0;
+
+    const $ = (id) => document.getElementById(id);
+
+    function hojeISO() {
+      const hoje = new Date();
+      const ano = hoje.getFullYear();
+      const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+      const dia = String(hoje.getDate()).padStart(2, "0");
+      return `${ano}-${mes}-${dia}`;
+    }
+
+    function formatarDataBR(dataISO) {
+      if (!dataISO) return "";
+      const [ano, mes, dia] = dataISO.split("-");
+      return `${dia}/${mes}/${ano}`;
+    }
+
+    function gerarId() {
+      return `${Date.now()}_${Math.random().toString(16).slice(2)}`;
+    }
+
+    function padronizar(texto) {
+      return String(texto || "").trim().toUpperCase();
+    }
+
+    function valor(texto) {
+      if (texto === null || texto === undefined) return null;
+      const normalizado = String(texto).trim().replace(",", ".");
+      if (!normalizado) return null;
+      const numero = Number(normalizado);
+      return Number.isFinite(numero) ? numero : null;
+    }
+
+    function inteiro(texto) {
+      const numero = valor(texto);
+      return numero === null ? null : Math.trunc(numero);
+    }
+
+    function numeroFormatado(numero, casas = 2) {
+      if (numero === null || numero === undefined || !Number.isFinite(Number(numero))) return "";
+      return Number(numero).toLocaleString("pt-BR", {
+        minimumFractionDigits: casas,
+        maximumFractionDigits: casas
+      });
+    }
+
+    function area(c, l) {
+      return c !== null && l !== null ? c * l : null;
+    }
+
+    function volume(c, l, a) {
+      return c !== null && l !== null && a !== null ? c * l * a : null;
+    }
+
+    function mostrarStatus(texto, tipo = "success") {
+      const status = $("status");
+      status.className = `status ${tipo}`;
+      status.textContent = texto;
+    }
+
+    function registrosSalvos() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      } catch {
+        return [];
+      }
+    }
+
+    function salvarRegistros(registros) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(registros, null, 2));
+    }
+
+    function adicionarRegistro(base, novo) {
+      if (!novo) return;
+      base.push({
+        id: gerarId(),
+        data: formatarDataBR($("data").value || hojeISO()),
+        encarregado: $("encarregado").value.trim(),
+        apontador: $("apontador").value.trim(),
+        bairro: padronizar($("bairro").value),
+        via: padronizar($("via").value),
+        ...novo
+      });
+    }
+
+    function adicionarDrenagem() {
+      contadorDrenagem++;
+      const wrapper = document.createElement("div");
+      wrapper.className = "mini-card drenagem";
+      wrapper.dataset.numero = contadorDrenagem;
+      wrapper.innerHTML = `
+        <h3>Drenagem ${contadorDrenagem}</h3>
+
+        <div class="subtitulo">Escavação</div>
+        <div class="grid">
+          <div class="field"><label>Comprimento</label><input class="dren-ce" type="text" inputmode="decimal"></div>
+          <div class="field"><label>Largura</label><input class="dren-le" type="text" inputmode="decimal"></div>
+          <div class="field"><label>Profundidade</label><input class="dren-pe" type="text" inputmode="decimal"></div>
+          <div class="field"><label>Volume calculado</label><input class="dren-vol-esc" type="text" readonly></div>
+        </div>
+
+        <div class="subtitulo">Colchão de areia</div>
+        <div class="grid">
+          <div class="field"><label>Comprimento</label><input class="dren-cca" type="text" inputmode="decimal"></div>
+          <div class="field"><label>Largura</label><input class="dren-lca" type="text" inputmode="decimal"></div>
+          <div class="field"><label>Profundidade</label><input class="dren-pca" type="text" value="0,10" inputmode="decimal"></div>
+          <div class="field"><label>Volume calculado</label><input class="dren-vol-ca" type="text" readonly></div>
+        </div>
+
+        <div class="subtitulo">Tubos</div>
+        <div class="grid">
+          <div class="field">
+            <label>Qtd.</label>
+            <input class="dren-qtd-tubo" type="text" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label>Ø Tubo</label>
+            <select class="dren-diametro">
+              <option value="">Selecione</option>
+              <option value="400" data-externo="518.8">400</option>
+              <option value="500" data-externo="673.9">500</option>
+              <option value="600" data-externo="748.7">600</option>
+              <option value="800" data-externo="967.7">800</option>
+              <option value="1000" data-externo="1212.8">1000</option>
+              <option value="1200" data-externo="1420">1200</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="subtitulo">Manta Bidim</div>
+        <div class="grid">
+          <div class="field"><label>Comprimento</label><input class="dren-cbidim" type="text" inputmode="decimal"></div>
+          <div class="field"><label>Largura</label><input class="dren-lbidim" type="text" inputmode="decimal"></div>
+          <div class="field"><label>Área calculada</label><input class="dren-area-bidim" type="text" readonly></div>
+        </div>
+
+        <div class="subtitulo">Aterro</div>
+        <div class="grid">
+          <div class="field"><label>Comprimento</label><input class="dren-ca" type="text" inputmode="decimal"></div>
+          <div class="field"><label>Largura</label><input class="dren-la" type="text" inputmode="decimal"></div>
+          <div class="field"><label>Profundidade</label><input class="dren-pa" type="text" inputmode="decimal"></div>
+          <div class="field"><label>Volume calculado</label><input class="dren-vol-at" type="text" readonly></div>
+        </div>
+
+        <div class="field" style="margin-top:14px;">
+          <label>Ocorrência / Observação</label>
+          <textarea class="dren-obs"></textarea>
+        </div>
+
+        <div class="buttons">
+          <button type="button" class="btn-danger" onclick="this.closest('.drenagem').remove()">Remover drenagem</button>
+        </div>
+      `;
+      $("drenagens").appendChild(wrapper);
+      wrapper.addEventListener("input", atualizarCalculos);
+      wrapper.addEventListener("change", atualizarCalculos);
+      atualizarCalculos();
+    }
+
+    function adicionarPVBL() {
+      contadorPVBL++;
+      const wrapper = document.createElement("div");
+      wrapper.className = "mini-card pvbl";
+      wrapper.dataset.numero = contadorPVBL;
+      wrapper.innerHTML = `
+        <h3>PV / BL ${contadorPVBL}</h3>
+
+        <div class="subtitulo">Poço de visita</div>
+        <div class="grid">
+          <div class="field"><label>Nº</label><input class="pv-num" type="text"></div>
+          <div class="field">
+            <label>Tamanho</label>
+            <select class="pv-tam">
+              <option value="">Selecione</option>
+              <option value="1,40x1,40">1,40x1,40</option>
+              <option value="1,60x1,60">1,60x1,60</option>
+              <option value="1,80x1,80">1,80x1,80</option>
+              <option value="OUTRO">Outro</option>
+            </select>
+          </div>
+          <div class="field pv-outro-wrap hidden"><label>Outro tamanho</label><input class="pv-outro" type="text"></div>
+          <div class="field"><label>Qtd.</label><input class="pv-qtd" type="text" inputmode="numeric"></div>
+          <div class="field">
+            <label>Status PV</label>
+            <select class="pv-status">
+              <option value="">Selecione</option>
+              <option value="EM ANDAMENTO">EM ANDAMENTO</option>
+              <option value="FINALIZADO">FINALIZADO</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="subtitulo">Boca de lobo</div>
+        <div class="grid">
+          <div class="field"><label>Qtd.</label><input class="bl-qtd" type="text" inputmode="numeric"></div>
+          <div class="field">
+            <label>Status BL</label>
+            <select class="bl-status">
+              <option value="">Selecione</option>
+              <option value="EM ANDAMENTO">EM ANDAMENTO</option>
+              <option value="FINALIZADO">FINALIZADO</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="buttons">
+          <button type="button" class="btn-danger" onclick="this.closest('.pvbl').remove()">Remover PV / BL</button>
+        </div>
+      `;
+      $("pvblContainer").appendChild(wrapper);
+
+      const selectTamanho = wrapper.querySelector(".pv-tam");
+      selectTamanho.addEventListener("change", () => {
+        const campoOutro = wrapper.querySelector(".pv-outro-wrap");
+        campoOutro.classList.toggle("hidden", selectTamanho.value !== "OUTRO");
+        if (selectTamanho.value !== "OUTRO") {
+          wrapper.querySelector(".pv-outro").value = "";
+        }
+      });
+    }
+
+    function atualizarCalculos() {
+      $("limpezaArea").value = numeroFormatado(area(valor($("limpezaComprimento").value), valor($("limpezaLargura").value)));
+
+      const motorMin = valor($("motorMinutos").value);
+      if (motorMin !== null) {
+        const horas = Math.floor(motorMin / 60);
+        const minutos = Math.round(motorMin % 60);
+        $("motorHoras").value = `${horas}:${String(minutos).padStart(2, "0")}h`;
+      } else {
+        $("motorHoras").value = "";
+      }
+
+      $("terrapVol").value = numeroFormatado(volume(valor($("terrapComp").value), valor($("terrapLarg").value), valor($("terrapProf").value)));
+      $("subbaseVol").value = numeroFormatado(volume(valor($("subbaseComp").value), valor($("subbaseLarg").value), valor($("subbaseProf").value)));
+      $("cbuqVol").value = numeroFormatado(volume(valor($("cbuqComp").value), valor($("cbuqLarg").value), valor($("cbuqEsp").value)));
+      $("binderArea").value = numeroFormatado(area(valor($("binderComp").value), valor($("binderLarg").value)));
+      $("pinturaArea").value = numeroFormatado(area(valor($("pinturaComp").value), valor($("pinturaLarg").value)));
+
+      $("demCalcArea").value = numeroFormatado(area(valor($("demCalcComp").value), valor($("demCalcLarg").value)));
+      $("calcadaArea").value = numeroFormatado(area(valor($("calcadaComp").value), valor($("calcadaLarg").value)));
+      $("camfVol").value = numeroFormatado(volume(valor($("camfComp").value), valor($("camfLarg").value), valor($("camfEsp").value)));
+      $("demLinhaArea").value = numeroFormatado(area(valor($("demLinhaComp").value), valor($("demLinhaLarg").value)));
+      $("linhaArea").value = numeroFormatado(area(valor($("linhaComp").value), valor($("linhaLarg").value)));
+
+      document.querySelectorAll(".drenagem").forEach((bloco) => {
+        const ce = valor(bloco.querySelector(".dren-ce").value);
+        const le = valor(bloco.querySelector(".dren-le").value);
+        const pe = valor(bloco.querySelector(".dren-pe").value);
+        bloco.querySelector(".dren-vol-esc").value = numeroFormatado(volume(ce, le, pe));
+
+        const cca = valor(bloco.querySelector(".dren-cca").value);
+        const lca = valor(bloco.querySelector(".dren-lca").value);
+        const pca = valor(bloco.querySelector(".dren-pca").value);
+        bloco.querySelector(".dren-vol-ca").value = numeroFormatado(volume(cca, lca, pca));
+
+        const cbidim = valor(bloco.querySelector(".dren-cbidim").value);
+        const lbidim = valor(bloco.querySelector(".dren-lbidim").value);
+        bloco.querySelector(".dren-area-bidim").value = numeroFormatado(area(cbidim, lbidim));
+
+        const ca = valor(bloco.querySelector(".dren-ca").value);
+        const la = valor(bloco.querySelector(".dren-la").value);
+        const pa = valor(bloco.querySelector(".dren-pa").value);
+
+        const diametroSelect = bloco.querySelector(".dren-diametro");
+        const option = diametroSelect.options[diametroSelect.selectedIndex];
+        const externo = option && option.dataset.externo ? Number(option.dataset.externo) / 1000 : 0;
+
+        let volAterro = null;
+        if (ca !== null && la !== null && pa !== null) {
+          volAterro = ca * la * pa;
+          if (externo > 0) {
+            volAterro -= Math.PI * Math.pow(externo / 2, 2) * ca;
+          }
+        }
+
+        bloco.querySelector(".dren-vol-at").value = numeroFormatado(volAterro);
+      });
+    }
+
+    function montarRegistros() {
+      const registros = [];
+
+      const cLim = valor($("limpezaComprimento").value);
+      const lLim = valor($("limpezaLargura").value);
+      if (cLim !== null && lLim !== null) {
+        adicionarRegistro(registros, {
+          tipo: "limpeza",
+          c: cLim,
+          l: lLim,
+          area: cLim * lLim
+        });
+      }
+
+      if ($("obsLimpeza").value.trim()) {
+        adicionarRegistro(registros, {
+          tipo: "obs_limpeza",
+          obs: $("obsLimpeza").value.trim()
+        });
+      }
+
+      document.querySelectorAll(".drenagem").forEach((bloco) => {
+        const ce = valor(bloco.querySelector(".dren-ce").value);
+        const le = valor(bloco.querySelector(".dren-le").value);
+        const pe = valor(bloco.querySelector(".dren-pe").value);
+        if (ce !== null && le !== null && pe !== null) {
+          adicionarRegistro(registros, {
+            tipo: "escavacao",
+            c: ce,
+            l: le,
+            a: pe,
+            vol: ce * le * pe
+          });
+        }
+
+        const cca = valor(bloco.querySelector(".dren-cca").value);
+        const lca = valor(bloco.querySelector(".dren-lca").value);
+        const pca = valor(bloco.querySelector(".dren-pca").value);
+        if (cca !== null && lca !== null && pca !== null) {
+          adicionarRegistro(registros, {
+            tipo: "colchao_areia",
+            c: cca,
+            l: lca,
+            a: pca,
+            vol: cca * lca * pca
+          });
+        }
+
+        const qtdTubo = inteiro(bloco.querySelector(".dren-qtd-tubo").value);
+        const diamSelect = bloco.querySelector(".dren-diametro");
+        const diam = diamSelect.value;
+        if (qtdTubo !== null) {
+          adicionarRegistro(registros, {
+            tipo: "tubo",
+            diam,
+            qtd: qtdTubo
+          });
+        }
+
+        const cbidim = valor(bloco.querySelector(".dren-cbidim").value);
+        const lbidim = valor(bloco.querySelector(".dren-lbidim").value);
+        if (cbidim !== null && lbidim !== null) {
+          adicionarRegistro(registros, {
+            tipo: "manta_bidim",
+            c: cbidim,
+            l: lbidim,
+            area: cbidim * lbidim
+          });
+        }
+
+        const ca = valor(bloco.querySelector(".dren-ca").value);
+        const la = valor(bloco.querySelector(".dren-la").value);
+        const pa = valor(bloco.querySelector(".dren-pa").value);
+        const option = diamSelect.options[diamSelect.selectedIndex];
+        const externo = option && option.dataset.externo ? Number(option.dataset.externo) / 1000 : 0;
+
+        if (ca !== null && la !== null && pa !== null) {
+          let volAterro = ca * la * pa;
+          if (externo > 0) {
+            volAterro -= Math.PI * Math.pow(externo / 2, 2) * ca;
+          }
+          adicionarRegistro(registros, {
+            tipo: "aterro",
+            c: ca,
+            l: la,
+            a: pa,
+            vol: volAterro
+          });
+        }
+
+        const obs = bloco.querySelector(".dren-obs").value.trim();
+        if (obs) {
+          adicionarRegistro(registros, {
+            tipo: "obs_drenagem",
+            obs
+          });
+        }
+      });
+
+      document.querySelectorAll(".pvbl").forEach((bloco) => {
+        const qtdPV = inteiro(bloco.querySelector(".pv-qtd").value);
+        const numPV = bloco.querySelector(".pv-num").value.trim();
+        const tamPV = bloco.querySelector(".pv-tam").value === "OUTRO"
+          ? bloco.querySelector(".pv-outro").value.trim()
+          : bloco.querySelector(".pv-tam").value;
+        const statusPV = bloco.querySelector(".pv-status").value;
+
+        if (qtdPV !== null || numPV || tamPV) {
+          adicionarRegistro(registros, {
+            tipo: "pv",
+            qtd: qtdPV ?? 0,
+            num: numPV,
+            tam: tamPV,
+            status: statusPV
+          });
+        }
+
+        const qtdBL = inteiro(bloco.querySelector(".bl-qtd").value);
+        const statusBL = bloco.querySelector(".bl-status").value;
+        if (qtdBL !== null) {
+          adicionarRegistro(registros, {
+            tipo: "bl",
+            qtd: qtdBL,
+            status: statusBL
+          });
+        }
+      });
+
+      if ($("obsPVBL").value.trim()) {
+        adicionarRegistro(registros, {
+          tipo: "obs_pvbl",
+          obs: $("obsPVBL").value.trim()
+        });
+      }
+
+      const motor = valor($("motorMinutos").value);
+      if (motor !== null) {
+        adicionarRegistro(registros, {
+          tipo: "motor",
+          minutos: motor,
+          h: motor / 60
+        });
+      }
+
+      const terrapC = valor($("terrapComp").value);
+      const terrapL = valor($("terrapLarg").value);
+      const terrapP = valor($("terrapProf").value);
+      if (terrapC !== null && terrapL !== null && terrapP !== null) {
+        adicionarRegistro(registros, {
+          tipo: "terrap",
+          c: terrapC,
+          l: terrapL,
+          a: terrapP,
+          vol: terrapC * terrapL * terrapP
+        });
+      }
+
+      if ($("obsTerrap").value.trim()) {
+        adicionarRegistro(registros, {
+          tipo: "obs_terrap",
+          obs: $("obsTerrap").value.trim()
+        });
+      }
+
+      const subC = valor($("subbaseComp").value);
+      const subL = valor($("subbaseLarg").value);
+      const subP = valor($("subbaseProf").value);
+      if (subC !== null && subL !== null && subP !== null) {
+        adicionarRegistro(registros, {
+          tipo: "subbase",
+          c: subC,
+          l: subL,
+          a: subP,
+          vol: subC * subL * subP
+        });
+      }
+
+      const cbC = valor($("cbuqComp").value);
+      const cbL = valor($("cbuqLarg").value);
+      const cbE = valor($("cbuqEsp").value);
+      if (cbC !== null && cbL !== null && cbE !== null) {
+        adicionarRegistro(registros, {
+          tipo: "cbuq",
+          c: cbC,
+          l: cbL,
+          a: cbE,
+          vol: cbC * cbL * cbE
+        });
+      }
+
+      const bindC = valor($("binderComp").value);
+      const bindL = valor($("binderLarg").value);
+      if (bindC !== null && bindL !== null) {
+        adicionarRegistro(registros, {
+          tipo: "binder",
+          c: bindC,
+          l: bindL,
+          area: bindC * bindL
+        });
+      }
+
+      const pintC = valor($("pinturaComp").value);
+      const pintL = valor($("pinturaLarg").value);
+      if (pintC !== null && pintL !== null) {
+        adicionarRegistro(registros, {
+          tipo: "pintura_ligacao",
+          c: pintC,
+          l: pintL,
+          area: pintC * pintL
+        });
+      }
+
+      if ($("obsPav").value.trim()) {
+        adicionarRegistro(registros, {
+          tipo: "obs_pav",
+          obs: $("obsPav").value.trim()
+        });
+      }
+
+      const demCalcC = valor($("demCalcComp").value);
+      const demCalcL = valor($("demCalcLarg").value);
+      if (demCalcC !== null && demCalcL !== null) {
+        adicionarRegistro(registros, {
+          tipo: "demolicao_calcada",
+          c: demCalcC,
+          l: demCalcL,
+          area: demCalcC * demCalcL
+        });
+      }
+
+      const calcC = valor($("calcadaComp").value);
+      const calcL = valor($("calcadaLarg").value);
+      const meioFio = valor($("meioFio").value);
+      if ((calcC !== null && calcL !== null) || meioFio !== null) {
+        adicionarRegistro(registros, {
+          tipo: "urb",
+          c: calcC ?? 0,
+          l: calcL ?? 0,
+          area: calcC !== null && calcL !== null ? calcC * calcL : 0,
+          mf: meioFio ?? 0
+        });
+      }
+
+      const demMF = valor($("demMeioFio").value);
+      if (demMF !== null) {
+        adicionarRegistro(registros, {
+          tipo: "demolicao_meiofio",
+          comp: demMF
+        });
+      }
+
+      const camfC = valor($("camfComp").value);
+      const camfL = valor($("camfLarg").value);
+      const camfE = valor($("camfEsp").value);
+      if (camfC !== null && camfL !== null && camfE !== null) {
+        adicionarRegistro(registros, {
+          tipo: "colchao_areia_meiofio",
+          c: camfC,
+          l: camfL,
+          e: camfE,
+          vol: camfC * camfL * camfE
+        });
+      }
+
+      const demLinhaC = valor($("demLinhaComp").value);
+      const demLinhaL = valor($("demLinhaLarg").value);
+      if (demLinhaC !== null && demLinhaL !== null) {
+        adicionarRegistro(registros, {
+          tipo: "demolicao_linha_agua",
+          c: demLinhaC,
+          l: demLinhaL,
+          area: demLinhaC * demLinhaL
+        });
+      }
+
+      const linhaC = valor($("linhaComp").value);
+      const linhaL = valor($("linhaLarg").value);
+      if (linhaC !== null && linhaL !== null) {
+        adicionarRegistro(registros, {
+          tipo: "linha_agua",
+          c: linhaC,
+          l: linhaL,
+          area: linhaC * linhaL
+        });
+      }
+
+      if ($("obsUrb").value.trim()) {
+        adicionarRegistro(registros, {
+          tipo: "obs_urb",
+          obs: $("obsUrb").value.trim()
+        });
+      }
+
+      if ($("redesAux").value.trim() || $("outrasInfo").value.trim()) {
+        adicionarRegistro(registros, {
+          tipo: "redes_auxiliares",
+          texto: $("redesAux").value.trim(),
+          info: $("outrasInfo").value.trim()
+        });
+      }
+
+      return registros;
+    }
+
+    async function enviarParaEndpoint(registros) {
+      const endpoint = $("endpoint").value.trim();
+      if (!endpoint) return { enviado: false, motivo: "Sem endpoint configurado." };
+
+      const resposta = await fetch(endpoint, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          origem: "html_infravias",
+          registros
+        })
+      });
+
+      return { enviado: true, resposta };
+    }
+
+    async function salvarLancamento(event) {
+      event.preventDefault();
+
+      if (!$("bairro").value.trim() || !$("via").value.trim()) {
+        mostrarStatus("Informe pelo menos Bairro e Via.", "error");
+        return;
+      }
+
+      const registros = montarRegistros();
+
+      if (!registros.length) {
+        mostrarStatus("Preencha ao menos uma atividade antes de salvar.", "error");
+        return;
+      }
+
+      const base = registrosSalvos();
+      base.push(...registros);
+      salvarRegistros(base);
+
+      $("preview").textContent = JSON.stringify(registros, null, 2);
+
+      try {
+        const envio = await enviarParaEndpoint(registros);
+        if (envio.enviado) {
+          mostrarStatus(`✔ ${registros.length} registro(s) salvo(s) localmente e enviado(s) ao endpoint configurado.`);
+        } else {
+          mostrarStatus(`✔ ${registros.length} registro(s) salvo(s) localmente. ${envio.motivo}`);
+        }
+      } catch (erro) {
+        mostrarStatus(`✔ Registros salvos localmente. O envio externo falhou: ${erro.message}`, "error");
+      }
+    }
+
+    function gerarPreview() {
+      const registros = montarRegistros();
+      $("preview").textContent = registros.length
+        ? JSON.stringify(registros, null, 2)
+        : "Nenhum registro preenchido para visualizar.";
+    }
+
+    function baixarJSON() {
+      const base = registrosSalvos();
+      const conteudo = JSON.stringify(base, null, 2);
+      const blob = new Blob([conteudo], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `infravias_registros_${Date.now()}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function limparFormulario() {
+      $("formulario").reset();
+      $("data").value = hojeISO();
+      $("drenagens").innerHTML = "";
+      $("pvblContainer").innerHTML = "";
+      contadorDrenagem = 0;
+      contadorPVBL = 0;
+      adicionarDrenagem();
+      adicionarPVBL();
+      atualizarCalculos();
+      $("preview").textContent = "Os dados do lançamento aparecerão aqui após clicar em “Visualizar JSON”.";
+      $("status").className = "status";
+      $("status").textContent = "";
+    }
+
+    function limparBaseLocal() {
+      const confirmar = confirm("Deseja realmente apagar os registros salvos localmente neste navegador?");
+      if (!confirmar) return;
+      localStorage.removeItem(STORAGE_KEY);
+      mostrarStatus("Base local apagada com sucesso.");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      $("data").value = hojeISO();
+      adicionarDrenagem();
+      adicionarPVBL();
+
+      document.querySelectorAll("input, select, textarea").forEach((campo) => {
+        campo.addEventListener("input", atualizarCalculos);
+        campo.addEventListener("change", atualizarCalculos);
+      });
+
+      $("formulario").addEventListener("submit", salvarLancamento);
+      atualizarCalculos();
+    });
+  </script>
+</body>
+</html>
